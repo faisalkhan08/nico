@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Nico - User Management</title>
+    <!-- Custom fonts for this template -->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive-cust.css' %}" rel="stylesheet">
+</head>
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <!-- <i class="fas fa-laugh-wink"></i> -->
+            </div>
+            <div class="sidebar-brand-text mx-3">&nbsp;</div>
+        </a>
+        <!-- <hr class="sidebar-divider my-0"> -->
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'home_page' %}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
+        {% if request.user.is_superuser %}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'accounts:user_manangement_list' %}">
+                    <i class="fas fa-users-cog"></i>
+                    <span>User Management</span></a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'accounts:create_color_set' %}">
+                    <i class="fas fa-palette"></i>
+                    <span>Color Set Management</span>
+                </a>
+            </li>
+        {% endif %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:template_management_list' %}">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Template Management</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:create_graphic' %}">
+                <i class="fas fa-chart-area"></i>
+                <span>Create Graphics</span></a>
+        </li>
+        <div class="text-center d-none">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+    </ul>
+    <!-- End of Sidebar -->
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-lg-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img class="img-profile rounded-circle d-lg-none"
+                                 src="{% static 'img/undraw_profile.svg' %}">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user.email }}</span>
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link lnkLogout" href="{% url 'accounts:logout' %}">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw" data-toggle="tooltip" data-placement="bottom"
+                               title="Logout"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <img class="" src="{% static 'img/logo.png' %}"/>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- End of Topbar -->
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+{#                <div class="d-sm-flex align-items-center justify-content-between mb-4">#}
+{#                    <h1 class="h3 text-gray-800">Create Graphics</h1>#}
+{#                    <div class="d-flex align-items-center">#}
+{#                        <a href="#" class="btn btn-info btn-icon-split d-inline-block shadow-sm" data-toggle="modal"#}
+{#                           data-target="#templateModal">#}
+{#                           <span class="icon text-white-50">#}
+{#                             <i class="fas fa-plus fa-sm text-white-50"></i>#}
+{#                           </span>#}
+{#                            <span class="text">Add CSV</span>#}
+{#                        </a>#}
+{#                    </div>#}
+{#                </div>#}
+
+{#                <div class="card shadow mb-4">#}
+{#                    <div class="card-header py-3">#}
+{#                        <h6 class="m-0 font-weight-bold text-success">Live Preview</h6>#}
+{#                    </div>#}
+{#                    <div class="card-body">#}
+{#                        <div class="lp-sec row ">#}
+{#                            <div class="col-12 col-md-3">#}
+{#                                <a class="btn btn-info d-block" id="download" download="ChartImage.png" href="">Save Graphics</a>#}
+{#                                <a class="btn btn-success d-block" id="save_template">Save Template</a>#}
+{#                                <a class="btn btn-primary d-block" href="#">Download Python Code</a>#}
+{#                            </div>#}
+{#                            <div class="col-12 col-md-9">#}
+{#                                <div class="chart-area ca-default">#}
+{#                                    <div class="d-flex justify-content-center align-items-center h-100">#}
+{##}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="card-body">#}
+{#                        <div class="lp-sec row ">#}
+{#                            <div class="col-12 col-md-3">#}
+{#                                <a class="btn btn-info d-block" href="#">Save Graphics</a>#}
+{#                                <a class="btn btn-success d-block" >Save Template</a>#}
+{#                                <a class="btn btn-primary d-block" href="#">Download Python Code</a>#}
+{#                            </div>#}
+{#                            <div class="col-12 col-md-9">#}
+{#                                <div class="chart-area">#}
+{#                                    <canvas id="myAreaChart"></canvas>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-success">Customize Graph</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="ca-actions-sec d-flex justify-content-center justify-content-sm-between align-items-sm-center flex-wrap flex-sm-nowrap mb-3">
+                                    <a class="btn btn-info m-2 w-100" data-toggle="modal" data-target="#variableModal" href="#">Variable</a>
+                                    <a class="btn btn-success m-2 w-100" data-toggle="modal" data-target="#scaleModal" >Scale</a>
+                                    <a class="btn btn-primary m-2 w-100" data-toggle="modal" data-target="#colourModal">Color</a>
+                                    <a class="btn btn-info m-2 w-100" href="#" data-toggle="modal" data-target="#legendModal">Legends</a>
+                                    <a class="btn btn-success m-2 w-100" href="#" data-toggle="modal" data-target="#legetModal">Leget</a>
+                                </div>
+
+                                <div class="chart-area ca-default">
+                                    <div class="d-flex justify-content-center align-items-center h-100">
+                                        <div id="container" style="width: 75%;">
+                                            <canvas id="chart" ></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 10px; margin-left: 10px;" class="ca-actions-sec d-flex justify-content-center justify-content-sm-between align-items-sm-center flex-wrap flex-sm-nowrap mb-3">
+                                    <a class="btn btn-success" id="download" download="ChartImage.png" href="">Download Graphics</a>
+                                    <a class="btn btn-success" id="save_template">Save Template</a>
+                                    <a class="btn btn-success" style="margin-right: 42%;" id="download_code">Download Python Code</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of Main Content -->
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Your Website 2020</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<div class="modal fade templateModal" id="templateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Create new template</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-center py-3">
+                    <div class="col-12">
+                        <div class="row mb-3 justify-content-center ">
+                            <label class="col-sm-4 col-form-label">Select input file: </label>
+                            <div class="col-sm-6">
+                                <a href="#" class="btn btn-light btn-icon-split btn-upload w-100 justify-content-start">
+                                 <span class="icon text-white-50">
+                                    <i class="fas fa-upload "></i>
+                                 </span>
+                                    <span class="text">
+                                    <input type="file" name="" class="fUpload" id="fileUpload"/>
+                                    Choose File
+                                 </span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center ">
+                            <label class="col-sm-4 col-form-label">Select chart type: </label>
+                            <div class="col-sm-6">
+                                <select class="form-select form-control" id="autoSizingSelect">
+                                    <option selected>Choose...</option>
+                                    <option value="Line">Line chart</option>
+                                    <option value="Pie">Pie chart</option>
+                                    <option value="Bar">Bar chart</option>
+                                    <option value="horizontal">Horizontal Bar chart</option>
+{#                                    <option value="Polar">Polar Area chart</option>#}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" id="upload">Done</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade templateModal" id="scaleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Enter Scale</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-center py-3">
+                    <div class="col-12">
+                        <div class="row justify-content-center ">
+                            <label class="col-sm-4 col-form-label">Min Scale: </label>
+                            <div class="col-sm-6">
+                               <input type="text" id="min_scale" value="{{ dic.scale_x }}" class="form-control" style="margin-bottom: 10px;">
+                            </div>
+                        </div>
+                        <div class="row justify-content-center ">
+                            <label class="col-sm-4 col-form-label">Max Scale: </label>
+                            <div class="col-sm-6">
+                               <input type="text" id="max_scale" value="{{ dic.scale_y }}"  class="form-control" style="margin-bottom: 10px;">
+                            </div>
+                        </div>
+                        <div class="row justify-content-center ">
+                            <label class="col-sm-4 col-form-label">Step Size: </label>
+                            <div class="col-sm-6">
+                               <input type="text" id="step_size" value="{{ dic.scale_step }}"  class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" id="submit_scale">Done</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade templateModal" id="legetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Enter Leget</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-center py-3">
+                    <div class="col-12">
+                        <div class="row justify-content-center ">
+                            <label class="col-sm-4 col-form-label">Title : </label>
+                            <div class="col-sm-6">
+                               <input type="text" id="title" value="{{ dic.labeling_title }}" class="form-control" style="margin-bottom: 10px;">
+                            </div>
+                        </div>
+                        <div class="row justify-content-center ">
+                            <label class="col-sm-4 col-form-label">X Axes Name: </label>
+                            <div class="col-sm-6">
+                               <input type="text" id="x_axes" value="{{ dic.labeling_x }}" class="form-control" style="margin-bottom: 10px;">
+                            </div>
+                        </div>
+                        <div class="row justify-content-center ">
+                            <label class="col-sm-4 col-form-label">Y Axes Name: </label>
+                            <div class="col-sm-6">
+                               <input type="text" id="y_axes" value="{{ dic.labeling_y }}" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" id="submit_leget">Done</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade templateModal" id="variableModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Select the variable</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-center py-3">
+                    <div class="col-12">
+                        <div class="row justify-content-center ">
+                            <label class="col-sm-4 col-form-label">Variable's: </label>
+                            <div class="col-sm-6">
+                                <select class="form-select form-control" id="variableSelect">
+                                    <option value="show_all">Show All</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" id="variable_change">Done</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade templateModal" id="legendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Legend</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-center py-3">
+                    <div class="col-12">
+                        <div class="row justify-content-center ">
+                            <label class="col-sm-4 col-form-label" style="    margin-bottom: 10px;">Legend: </label>
+                            <div class="col-sm-6">
+                                <select class="form-select form-control" id="legendSelect">
+                                    {% if dic.legends == "top" %}
+                                        <option value="top">Top</option>
+                                        <option value="bottom">Bottom</option>
+                                        <option value="Left">left</option>
+                                        <option value="right">Right</option>
+                                    {% elif dic.legends == "bottom" %}
+                                        <option value="bottom">Bottom</option>
+                                        <option value="top">Top</option>
+                                        <option value="Left">left</option>
+                                        <option value="right">Right</option>
+                                    {% elif dic.legends == "Left" %}
+                                        <option value="Left">left</option>
+                                        <option value="top">Top</option>
+                                        <option value="bottom">Bottom</option>
+                                        <option value="right">Right</option>
+                                    {% elif dic.legends == "top" %}
+                                        <option value="right">Right</option>
+                                        <option value="top">Top</option>
+                                        <option value="bottom">Bottom</option>
+                                        <option value="right">Right</option>
+                                    {% else %}
+                                        <option value="top">Top</option>
+                                        <option value="bottom">Bottom</option>
+                                        <option value="Left">left</option>
+                                        <option value="right">Right</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row justify-content-center ">
+                            <label class="col-sm-4 col-form-label">Align: </label>
+                            <div class="col-sm-6">
+                                <select class="form-select form-control" id="alignSelect">
+                                    {% if dic.alignment == "start" %}
+                                        <option value="start">Start</option>
+                                        <option value="center">Center</option>
+                                        <option value="end">End</option>
+                                    {% elif dic.alignment == "center" %}
+                                        <option value="center">Center</option>
+                                        <option value="start">Start</option>
+                                        <option value="end">End</option>
+                                    {% elif dic.alignment == "end" %}
+                                        <option value="end">End</option>
+                                        <option value="center">Center</option>
+                                        <option value="start">Start</option>
+                                    {% else %}
+                                        <option value="start">Start</option>
+                                        <option value="center">Center</option>
+                                        <option value="end">End</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" id="legend_change">Done</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade templateModal" id="colourModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Select the variable</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-center py-3">
+                    <div class="col-12">
+                        <div class="row justify-content-center ">
+                            <label class="col-sm-4 col-form-label">Variable's: </label>
+                            <div class="col-sm-6">
+                                <select class="form-select form-control" id="colourSelect">
+                                    <option>Select the Colour Set</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" id="color_change">Done</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap core JavaScript-->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+<!-- Page level plugins -->
+<script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
+<!-- Page level custom scripts -->
+<script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+<script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script>
+    var myLineChart
+    {#$(document).ready(function () {#}
+    {#     var myLineChart#}
+    {#    var variable_count = 0#}
+    {#    var datasets = []#}
+    {#    var label_list = []#}
+    {#    var data_ = {{ data|safe }}#}
+    {#    var dic_data = {{ dic|safe }}#}
+    {#    for (var i = 0; i < data_.length; i++) {#}
+    {#        var dic = {}#}
+    {#        if (i !== 0) {#}
+    {#            dic['data'] = data_[i]['data']#}
+    {#            dic['label'] = data_[i]['label']#}
+    {#            dic['backgroundColor'] = ['rgba(47, 152, 208, 0.2)']#}
+    {#            dic['borderColor'] = ['rgba(19, 247, 228,1)']#}
+    {#            dic['borderWidth'] = 2#}
+    {#            dic['pointBackgroundColor'] = 'rgba(19, 247, 228,1)'#}
+    {#            dic['pointBorderColor'] = 'rgba(19, 247, 228,1)'#}
+    {#            dic['fill'] = false#}
+    {#            dic['hidden'] = false#}
+    {#            dic['pointBorderWidth'] = 2#}
+    {#            datasets.push(dic)#}
+    {#            label_list.push(data_[i]['label'])#}
+    {#        }#}
+    {#    }#}
+    {#    var ctx = document.getElementById('chart').getContext('2d');#}
+    {#    myLineChart = new Chart(ctx, {#}
+    {#        type: dic_data['chart_type'],#}
+    {#        backgroundColor: 'white',#}
+    {#        data: {#}
+    {#            labels: data_[0]['data'],#}
+    {#            datasets: datasets#}
+    {#        },#}
+    {#        options: {#}
+    {#            responsive: true,#}
+    {#            legend: {#}
+    {#                position: 'top',#}
+    {#                align: "center"#}
+    {#            },#}
+    {#            scales: {#}
+    {#                xAxes: [{#}
+    {#                    display: true,#}
+    {#                    scaleLabel: {#}
+    {#                        display: true,#}
+    {#                        labelString: dic_data['labeling_x']#}
+    {#                    },#}
+    {##}
+    {#                }],#}
+    {#                yAxes: [{#}
+    {#                    ticks: {#}
+    {#                        beginAtZero: true,#}
+    {#                    },#}
+    {#                    scaleLabel: {#}
+    {#                        display: true,#}
+    {#                        labelString: dic_data['labeling_y']#}
+    {#                    }#}
+    {#                }]#}
+    {#            }#}
+    {#        },#}
+    {#        tooltips: {#}
+    {#            mode: 'index',#}
+    {#            intersect: true#}
+    {#        },#}
+    {#        library: {#}
+    {#            annotation: {#}
+    {#                annotations: [{#}
+    {#                    type: 'line',#}
+    {#                    mode: 'horizontal',#}
+    {#                    scaleID: 'y-axis-0',#}
+    {#                    value: 5,#}
+    {#                }]#}
+    {#            }#}
+    {#        }#}
+    {#    });#}
+    {#    variable_count = label_list.length#}
+    {#    for (var x = 0; x < label_list.length; x++) {#}
+    {#        $("#variableSelect").append('<option value="' + [x] + '">' + label_list[x] + '</option>')#}
+    {#    }#}
+    {##}
+    {#    var align = $('select#alignSelect option:selected').val()#}
+    {#    var legend = $('select#legendSelect option:selected').val()#}
+    {#    myLineChart.options.legend.position = legend#}
+    {#    myLineChart.options.legend.align = align#}
+    {#    myLineChart.update();#}
+    {##}
+    {#    var title = $('#title').val()#}
+    {#    var x_axes = $('#x_axes').val()#}
+    {#    var y_axes_ = $('#y_axes').val()#}
+    {#    myLineChart.options.scales.yAxes[0].scaleLabel.labelString = y_axes_;#}
+    {#    myLineChart.options.scales.xAxes[0].scaleLabel.labelString = x_axes;#}
+    {#    myLineChart.options.title.text = title;#}
+    {#    myLineChart.options.title.display = true;#}
+    {#    myLineChart.update();#}
+    {##}
+    {#    var max_scale = $('#max_scale').val()#}
+    {#    var min_scale = $('#min_scale').val()#}
+    {#    var step_size = $('#step_size').val()#}
+    {#    myLineChart.options.scales.yAxes[0].ticks.min = parseInt(min_scale);#}
+    {#    myLineChart.options.scales.yAxes[0].ticks.max = parseInt(max_scale);#}
+    {#    myLineChart.options.scales.yAxes[0].ticks.stepSize = parseInt(step_size);#}
+    {#    myLineChart.update();#}
+    {##}
+    //{#});#}
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    $(function () {
+        $.get("/accounts/list_of_colourset", function (response) {
+
+            for (var x = 0; x < response.length; x++) {
+                console.log(response[x]['colour_set_name'])
+                $("#colourSelect").append('<option data-id="' + response[x]['id'] + '" value="' + response[x]['colour_list'] + '">' + response[x]['colour_set_name'] + '</option>')
+            }
+        });
+
+        var myLineChart
+        var variable_count = 0
+
+        var datasets = []
+        var label_list = []
+        var data_ = {{ data|safe }}
+        var dic_data = {{ dic|safe }}
+
+        for (var i = 0; i < data_.length; i++) {
+            var dic = {}
+            dic['data'] = data_[i]['data']
+            dic['label'] = data_[i]['label']
+            dic['backgroundColor'] = ['rgba(47, 152, 208, 0.2)']
+            dic['borderColor'] = ['rgba(19, 247, 228,1)']
+            dic['fill'] = false
+            dic['lineTension'] = 0
+            dic['hidden'] = false
+            dic['pointBorderWidth'] = 2
+            datasets.push(dic)
+            label_list.push(data_[i]['label'])
+
+        }
+        var ctx = document.getElementById('chart').getContext('2d');
+        myLineChart = new Chart(ctx, {
+            type: dic_data['chart_type'],
+            backgroundColor: 'white',
+            data: {
+                labels: label_list,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'top',
+                    align: "center"
+                },
+                scales: {
+                                    xAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Date'
+                                        },
+                                        gridLines: {
+                                            drawOnChartArea: false
+                                        }
+
+                                    }],
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                        },
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'value'
+                                        },
+                                        gridLines: {
+                                            drawOnChartArea: false
+                                        }
+                                    }]
+                                }
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: true
+            },
+            library: {
+                annotation: {
+                    annotations: [{
+                        type: 'line',
+                        mode: 'horizontal',
+                        scaleID: 'y-axis-0',
+                        value: 5,
+                    }]
+                }
+            }
+        });
+        variable_count = label_list.length
+        for (var x = 0; x < label_list.length; x++) {
+            $("#variableSelect").append('<option value="' + [x] + '">' + label_list[x] + '</option>')
+        }
+
+        var align = $('select#alignSelect option:selected').val()
+        var legend = $('select#legendSelect option:selected').val()
+        myLineChart.options.legend.position = legend
+        myLineChart.options.legend.align = align
+        myLineChart.update();
+
+        var title = $('#title').val()
+        var x_axes = $('#x_axes').val()
+        var y_axes_ = $('#y_axes').val()
+        myLineChart.options.scales.yAxes[0].scaleLabel.labelString = y_axes_;
+        myLineChart.options.scales.xAxes[0].scaleLabel.labelString = x_axes;
+        myLineChart.options.title.text = title;
+        myLineChart.options.title.display = true;
+        myLineChart.update();
+
+        var max_scale = $('#max_scale').val()
+        var min_scale = $('#min_scale').val()
+        var step_size = $('#step_size').val()
+        myLineChart.options.scales.yAxes[0].ticks.min = parseInt(min_scale);
+        myLineChart.options.scales.yAxes[0].ticks.max = parseInt(max_scale);
+        myLineChart.options.scales.yAxes[0].ticks.stepSize = parseInt(step_size);
+        myLineChart.update();
+
+        var colour_list = dic_data['colour_list'];
+        var dataset = myLineChart.data.datasets
+        console.log(dataset)
+        console.log(dataset.length)
+        for (var i = 0; i < dataset.length; i++) {
+            console.log(dataset[i].data)
+            console.log(dataset[i].data.length)
+            console.log(dic_data['chart_type'])
+            var random = getRandomColor()
+            for (var j = 0; j < dataset[i].data.length; j++) {
+                if (dic_data['chart_type'] === "pie") {
+                    if (j === 0) {
+                        myLineChart.data.datasets[i].backgroundColor[j] = 'red';
+                        myLineChart.update();
+                    } else if (j === 1) {
+                        myLineChart.data.datasets[i].backgroundColor[j] = 'blue';
+                        myLineChart.update();
+                    } else {
+                        myLineChart.data.datasets[i].backgroundColor[j] = random;
+                        myLineChart.update();
+                    }
+                } else if (dic_data['chart_type'] === "bar" || dic_data['chart_type'] === "horizontalBar") {
+                    myLineChart.data.datasets[i].backgroundColor = colour_list[i];
+                    myLineChart.data.datasets[i].borderColor = colour_list[i];
+                    myLineChart.update();
+                } else if (dic_data['chart_type'] === "line") {
+                    myLineChart.data.datasets[i].backgroundColor = colour_list[i];
+                    myLineChart.data.datasets[i].borderColor = colour_list[i];
+                    myLineChart.update();
+                }
+            }
+        }
+
+
+        $("#upload").bind("click", function () {
+
+            if (myLineChart != null) {
+                myLineChart.destroy();
+            }
+            $('#templateModal').modal('hide')
+            $(".modal-backdrop.show").css({ 'opacity' : '' });
+            $('.modal-open').css({ 'overflow' : 'auto' });
+            var charts_type =  $('select#autoSizingSelect option:selected').val()
+            var formData = new FormData();
+            if (charts_type === "line"){
+                formData.append('file', $('#fileUpload')[0].files[0]);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                formData.append('chart_type', $('select#autoSizingSelect option:selected').val());
+                formData.append('label', 'week');
+                $.ajax({
+                    url: "{% url 'accounts:create_graphic' %}",
+                    type: 'post',
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        var datasets = []
+                        var label_list = []
+                        var lab
+                        for (var i = 0; i < data.length; i++) {
+                            var dic = {}
+                            dic['data'] = data[i]['data']
+                            dic['label'] = data[i]['label']
+                            dic['backgroundColor'] = ['rgba(47, 152, 208, 0.2)']
+                            {#dic['borderColor'] = ['rgba(19, 247, 228,1)']#}
+                                {#dic['borderWidth'] = 2#}
+                                {#dic['pointBackgroundColor'] = 'rgba(19, 247, 228,1)'#}
+                                {#dic['pointBorderColor'] = 'rgba(19, 247, 228,1)'#}
+                            dic['fill'] = false
+                            dic['hidden'] = false
+                            dic['lineTension'] = 0
+                                {#dic['pointBorderWidth'] = 2#}
+                            datasets.push(dic)
+                            label_list.push(data[i]['label'])
+                        }
+                        Chart.plugins.register({
+                            beforeDraw: function (chartInstance) {
+                                var ctx = chartInstance.chart.ctx;
+                                ctx.fillStyle = "white";
+                                ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
+                            }
+                        });
+
+                        console.log(datasets)
+                        var ctx = document.getElementById('chart').getContext('2d');
+                        myLineChart = new Chart(ctx, {
+                            type: 'line',
+                            backgroundColor: 'white',
+                            data: {
+                                labels: label_list,
+                                datasets: datasets
+                            },
+                            options: {
+                                responsive: true,
+
+                                legend: {
+                                    position: 'top',
+                                    align: "center"
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Date'
+                                        },
+                                        gridLines: {
+                                            drawOnChartArea: false
+                                        }
+
+                                    }],
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                        },
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'value'
+                                        },
+                                        gridLines: {
+                                            drawOnChartArea: false
+                                        }
+                                    }]
+                                }
+                            },
+                            tooltips: {
+                                mode: 'index',
+                                intersect: true
+                            },
+                            library: {
+                                annotation: {
+                                    annotations: [{
+                                        type: 'line',
+                                        mode: 'horizontal',
+                                        scaleID: 'y-axis-0',
+                                        value: 5,
+                                    }]
+                                }
+                            }
+                        });
+                        ctx.style.backgroundColor = 'rgba(255,0,0,255)';
+                        variable_count = label_list.length
+                        for (var x=0; x< label_list.length; x++){
+                            $("#variableSelect").append('<option value="'+ [x] +'">'+ label_list[x] +'</option>')
+                        }
+                    }
+                });
+            }else if(charts_type === "bar"){
+                formData.append('file', $('#fileUpload')[0].files[0]);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                formData.append('chart_type', $('select#autoSizingSelect option:selected').val());
+                formData.append('label', 'week');
+                $.ajax({
+                    url: "{% url 'accounts:create_graphic' %}",
+                    type: 'post',
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        var datasets = []
+                        var label_list = []
+                        var lab
+                        for (var i = 0; i < data.length; i++) {
+                            console.log(data[i]['data'])
+                            var dic = {}
+                            {#console.log(data[i])#}
+                            {#if (i === 0){#}
+                            {#    lab = data[i]['data']#}
+                            //{#}#}
+                            {#if (i !== 0) {#}
+                            dic['data'] = data[i]['data']
+                            dic['label'] = data[i]['label']
+                            dic['backgroundColor'] = ['rgba(47, 152, 208, 0.2)']
+                                {#dic['borderColor'] = ['rgba(19, 247, 228,1)']#}
+                                {#dic['borderWidth'] = 2#}
+                                {#dic['pointBackgroundColor'] = 'rgba(19, 247, 228,1)'#}
+                                {#dic['pointBorderColor'] = 'rgba(19, 247, 228,1)'#}
+                            dic['fill'] = false
+                                {#dic['pointBorderWidth'] = 2#}
+                            datasets.push(dic)
+                            label_list.push(data[i]['label'])
+                            //}
+                        }
+                        Chart.plugins.register({
+                            beforeDraw: function (chartInstance) {
+                                var ctx = chartInstance.chart.ctx;
+                                ctx.fillStyle = "white";
+                                ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
+                            }
+                        });
+                        var ctx = document.getElementById('chart').getContext('2d');
+                        myLineChart = new Chart(ctx, {
+                            type: 'bar',
+                            backgroundColor: 'white',
+                            data: {
+                                labels: label_list,
+                                datasets: datasets
+                            },
+                            options: {
+                                responsive: true,
+                                legend: {
+                                    position: 'top',
+                                    align: "center"
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Date'
+                                        },
+                                        gridLines: {
+                                            drawOnChartArea: false
+                                        }
+
+                                    }],
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                        },
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'value'
+                                        },
+                                        gridLines: {
+                                            drawOnChartArea: false
+                                        }
+                                    }]
+                                }
+                            }
+                        });
+                        variable_count = label_list.length
+                        for (var x=0; x< label_list.length; x++){
+                            $("#variableSelect").append('<option value="'+ [x] +'">'+ label_list[x] +'</option>')
+                        }
+                    }
+                });
+            }else if(charts_type === "pie"){
+                formData.append('file', $('#fileUpload')[0].files[0]);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                formData.append('chart_type', $('select#autoSizingSelect option:selected').val());
+                formData.append('label', 'week');
+                $.ajax({
+                    url: "{% url 'accounts:create_graphic' %}",
+                    type: 'post',
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        var datasets = []
+                        var label_list = []
+                        var lab
+                        for (var i = 0; i < data.length; i++) {
+                            var dic = {}
+                            if (i !== 0) {
+                                dic['data'] = data[i]['data']
+                                dic['label'] = data[i]['label']
+                                dic['backgroundColor'] = ['rgba(47, 152, 208, 0.2)']
+                                {#dic['borderColor'] = ['rgba(19, 247, 228,1)']#}
+                                    {#dic['borderWidth'] = 2#}
+                                    {#dic['pointBackgroundColor'] = 'rgba(19, 247, 228,1)'#}
+                                    {#dic['pointBorderColor'] = 'rgba(19, 247, 228,1)'#}
+                                dic['fill'] = false
+                                dic['hidden'] = false
+                                    {#dic['pointBorderWidth'] = 2#}
+                                datasets.push(dic)
+                                label_list.push(data[i]['label'])
+                            }
+                        }
+                        Chart.plugins.register({
+                            beforeDraw: function (chartInstance) {
+                                var ctx = chartInstance.chart.ctx;
+                                ctx.fillStyle = "white";
+                                ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
+                            }
+                        });
+                        var ctx = document.getElementById('chart').getContext('2d');
+                        myLineChart = new Chart(ctx, {
+                            type: 'pie',
+                            backgroundColor: 'white',
+                            data: {
+                                labels: data[0]['data'],
+                                datasets: datasets
+                            },
+                            options: {
+                                responsive: true,
+                                legend: {
+                                    position: 'top',
+                                    align: "center"
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        display: true,
+                                        ticks: {
+                                            display:false
+                                        },
+                                        scaleLabel: {
+                                            display: true,
+                                        },
+                                        gridLines: {
+                                            drawOnChartArea: false,
+                                            display:false
+                                        }
+
+                                    }],
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                            display:false
+                                        },
+                                        scaleLabel: {
+                                            display: true,
+                                        },
+                                        gridLines: {
+                                            drawOnChartArea: false,
+                                            display:false
+                                        }
+                                    }]
+                                }
+                            },
+                            tooltips: {
+                                mode: 'index',
+                                intersect: true
+                            },
+                            library: {
+                                annotation: {
+                                    annotations: [{
+                                        type: 'line',
+                                        mode: 'horizontal',
+                                        scaleID: 'y-axis-0',
+                                        value: 5,
+                                    }]
+                                }
+                            }
+                        });
+                        variable_count = data[0]['data'].length
+                        for (var x=0; x< data[0]['data'].length; x++){
+                            $("#variableSelect").append('<option value="'+ [x] +'">'+ data[0]['data'][x] +'</option>')
+                        }
+                    }
+                });
+            }else if(charts_type === "horizontalBar"){
+                formData.append('file', $('#fileUpload')[0].files[0]);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                formData.append('chart_type', $('select#autoSizingSelect option:selected').val());
+                formData.append('label', 'week');
+                $.ajax({
+                    url: "{% url 'accounts:create_graphic' %}",
+                    type: 'post',
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        var datasets = []
+                        var label_list = []
+                        var lab
+                        for (var i = 0; i < data.length; i++) {
+                            var dic = {}
+
+                            dic['data'] = data[i]['data']
+                            dic['label'] = data[i]['label']
+                            dic['backgroundColor'] = ['rgba(47, 152, 208, 0.2)']
+                            dic['borderColor'] = ['rgba(19, 247, 228,1)']
+                                {#dic['borderWidth'] = 2#}
+                                {#dic['pointBackgroundColor'] = 'rgba(19, 247, 228,1)'#}
+                                {#dic['pointBorderColor'] = 'rgba(19, 247, 228,1)'#}
+                            dic['fill'] = false
+                            dic['hidden'] = false
+                                {#dic['pointBorderWidth'] = 2#}
+                            datasets.push(dic)
+                            label_list.push(data[i]['label'])
+
+                        }
+                        Chart.plugins.register({
+                            beforeDraw: function (chartInstance) {
+                                var ctx = chartInstance.chart.ctx;
+                                ctx.fillStyle = "white";
+                                ctx.fillRect(0, 0, chartInstance.chart.width, chartInstance.chart.height);
+                            }
+                        });
+                        var ctx = document.getElementById('chart').getContext('2d');
+                        myLineChart = new Chart(ctx, {
+                            type: 'horizontalBar',
+                            backgroundColor: 'white',
+                            data: {
+                                labels: label_list,
+                                datasets: datasets
+                            },
+                            options: {
+                                responsive: true,
+                                legend: {
+                                    position: 'top',
+                                    align: "center"
+                                },
+                                scales: {
+                                    xAxes: [{
+                                        display: true,
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Date'
+                                        },
+                                        gridLines: {
+                                            drawOnChartArea: false
+                                        }
+
+                                    }],
+                                    yAxes: [{
+                                        ticks: {
+                                            beginAtZero: true,
+                                        },
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'value'
+                                        },
+                                        gridLines: {
+                                            drawOnChartArea: false
+                                        }
+                                    }]
+                                }
+                            },
+                            tooltips: {
+                                mode: 'index',
+                                intersect: true
+                            },
+                            library: {
+                                annotation: {
+                                    annotations: [{
+                                        type: 'line',
+                                        mode: 'horizontal',
+                                        scaleID: 'y-axis-0',
+                                        value: 5,
+                                    }]
+                                }
+                            }
+                        });
+                        variable_count = label_list.length
+                        for (var x=0; x< label_list.length; x++){
+                            $("#variableSelect").append('<option value="'+ [x] +'">'+ label_list[x] +'</option>')
+                        }
+                    }
+                });
+            }else if(charts_type === "venn_diagram"){
+                formData.append('file', $('#fileUpload')[0].files[0]);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                formData.append('chart_type', $('select#autoSizingSelect option:selected').val());
+                formData.append('label', 'week');
+                $.ajax({
+                    url: "{% url 'accounts:create_graphic' %}",
+                    type: 'post',
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        $('#graph').append('<img id="venn" style="width: 120%;margin-left: -60%;" src="data:image/png;base64,'+ data['graphic'] +'" >')
+                    }
+                });
+            }
+        });
+
+        $('#legend_change').bind('click', function () {
+            var align = $('select#alignSelect option:selected').val()
+            var legend = $('select#legendSelect option:selected').val()
+            myLineChart.options.legend.position = legend
+            myLineChart.options.legend.align = align
+            myLineChart.update();
+            $('#legendModal').modal('hide')
+            $(".modal-backdrop.show").css({ 'opacity' : '' });
+            $('.modal-open').css({ 'overflow' : 'auto' });
+
+        })
+
+
+        $('#variable_change').bind('click', function () {
+            var chart_type = $('select#autoSizingSelect option:selected').val()
+            if(chart_type === "pie"){
+                var set = $('select#variableSelect option:selected').val()
+                if (set === "show_all") {
+                    for (var x = 0; x < variable_count; x++) {
+                        myLineChart.getDatasetMeta(0).data[x].hidden = false;
+                        myLineChart.update();
+                    }
+                } else {
+                    for (var x = 0; x < variable_count; x++) {
+                        if (x === parseInt(set)) {
+                            myLineChart.getDatasetMeta(0).data[x].hidden = false;
+                            myLineChart.update();
+                        } else {
+                            myLineChart.getDatasetMeta(0).data[x].hidden = true;
+                            myLineChart.update();
+                        }
+
+                    }
+                }
+                $('#variableModal').modal('hide')
+                $(".modal-backdrop.show").css({'opacity': ''});
+                $('.modal-open').css({'overflow': 'auto'});
+            }else {
+                var set = $('select#variableSelect option:selected').val()
+                if (set === "show_all") {
+                    for (var x = 0; x < variable_count; x++) {
+                        myLineChart.data.datasets[x].hidden = false
+                        myLineChart.update();
+                    }
+                } else {
+                    for (var x = 0; x < variable_count; x++) {
+                        if (x === parseInt(set)) {
+                            myLineChart.data.datasets[x].hidden = false
+                            myLineChart.update();
+                        } else {
+                            myLineChart.data.datasets[x].hidden = true
+                            myLineChart.update();
+                        }
+
+                    }
+                }
+                $('#variableModal').modal('hide')
+                $(".modal-backdrop.show").css({'opacity': ''});
+                $('.modal-open').css({'overflow': 'auto'});
+            }
+        });
+
+        $('#color_change').bind('click', function () {
+            var chart_type = $('select#autoSizingSelect option:selected').val()
+            var colourSelect = $('select#colourSelect option:selected').val()
+            var colour_list = colourSelect.split(',');
+
+            if(chart_type === "venn_diagram"){
+                var formData = new FormData();
+                formData.append('file', $('#fileUpload')[0].files[0]);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                formData.append('colour_list', colour_list);
+                formData.append('chart_type', $('select#autoSizingSelect option:selected').val());
+                formData.append('label', 'week');
+                $.ajax({
+                    url: "{% url 'accounts:create_graphic' %}",
+                    type: 'post',
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        $('#graph').empty()
+                        $('#graph').append('<img id="venn" style="width: 120%;margin-left: -60%;" src="data:image/png;base64,'+ data['graphic'] +'" >')
+                        $('#colourModal').modal('hide')
+                        $(".modal-backdrop.show").css({'opacity': ''});
+                        $('.modal-open').css({'overflow': 'auto'});
+                    }
+                });
+
+            }else {
+
+                var dataset = myLineChart.data.datasets
+                console.log(dataset)
+                console.log(dataset.length)
+                for (var i = 0; i < dataset.length; i++) {
+                    console.log(dataset[i].data)
+                    console.log(dataset[i].data.length)
+                    var random = getRandomColor()
+                    for (var j = 0; j < dataset[i].data.length; j++) {
+                        if (chart_type === "pie") {
+                            myLineChart.data.datasets[i].backgroundColor[j] = colour_list[j];
+                            myLineChart.update();
+                        } else if (chart_type === "bar" || chart_type === "horizontalBar") {
+                            myLineChart.data.datasets[i].backgroundColor = colour_list[i];
+                            myLineChart.data.datasets[i].borderColor = colour_list[i];
+                            myLineChart.update();
+                        } else if (chart_type === "line") {
+                            myLineChart.data.datasets[i].backgroundColor = colour_list[i];
+                            myLineChart.data.datasets[i].borderColor = colour_list[i];
+                            myLineChart.update();
+                        }
+                    }
+                }
+                $('#colourModal').modal('hide')
+                $(".modal-backdrop.show").css({'opacity': ''});
+                $('.modal-open').css({'overflow': 'auto'});
+            }
+        })
+
+        $('#submit_scale').bind('click', function () {
+            var max_scale = $('#max_scale').val()
+            var min_scale = $('#min_scale').val()
+            var step_size = $('#step_size').val()
+            myLineChart.options.scales.yAxes[0].ticks.min = parseInt(min_scale);
+            myLineChart.options.scales.yAxes[0].ticks.max = parseInt(max_scale);
+            myLineChart.options.scales.yAxes[0].ticks.stepSize = parseInt(step_size);
+            myLineChart.update();
+            $('#scaleModal').modal('hide')
+            $(".modal-backdrop.show").css({ 'opacity' : '' });
+            $('.modal-open').css({ 'overflow' : 'auto' });
+        });
+
+        $('#submit_leget').bind('click', function () {
+            var chart_type = $('select#autoSizingSelect option:selected').val()
+            if ( chart_type === "venn_diagram"){
+                var colourSelect = $('select#colourSelect option:selected').val()
+                var colour_list = colourSelect.split(',');
+                var title = $('#title').val()
+                var formData = new FormData();
+                formData.append('file', $('#fileUpload')[0].files[0]);
+                formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+                formData.append('colour_list', colour_list);
+                formData.append('title', title);
+                formData.append('chart_type', $('select#autoSizingSelect option:selected').val());
+                formData.append('label', 'week');
+                $.ajax({
+                    url: "{% url 'accounts:create_graphic' %}",
+                    type: 'post',
+                    data: formData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        $('#graph').empty()
+                        $('#graph').append('<img id="venn" style="width: 120%;margin-left: -60%;" src="data:image/png;base64,'+ data['graphic'] +'" >')
+                        $('#legetModal').modal('hide')
+                        $(".modal-backdrop.show").css({'opacity': ''});
+                        $('.modal-open').css({'overflow': 'auto'});
+                    }
+                });
+            }else {
+                var title = $('#title').val()
+                var x_axes = $('#x_axes').val()
+                var y_axes_ = $('#y_axes').val()
+                myLineChart.options.scales.yAxes[0].scaleLabel.labelString = y_axes_;
+                myLineChart.options.scales.xAxes[0].scaleLabel.labelString = x_axes;
+                myLineChart.options.title.text = title;
+                myLineChart.options.title.display = true;
+                myLineChart.update();
+                $('#legetModal').modal('hide')
+                $(".modal-backdrop.show").css({'opacity': ''});
+                $('.modal-open').css({'overflow': 'auto'});
+            }
+        })
+
+        $("#save_template").bind('click', function () {
+            var formData1 = new FormData();
+            var file = $('#fileUpload')[0].files[0]
+            formData1.append('file', file);
+            formData1.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            formData1.append('charts_type', $('select#autoSizingSelect option:selected').val());
+            formData1.append('set', $('select#variableSelect option:selected').text());
+            formData1.append('max_scale', $('#max_scale').val());
+            formData1.append('step_size', $('#step_size').val());
+            formData1.append('min_scale', $('#min_scale').val());
+            formData1.append('align', $('select#alignSelect option:selected').val());
+            formData1.append('legend', $('select#legendSelect option:selected').val());
+            formData1.append('title', $('#title').val());
+            formData1.append('x_axes', $('#x_axes').val());
+            formData1.append('y_axes', $('#y_axes').val());
+            $.ajax({
+                url: '{% url 'accounts:create_templates' %}',
+                type: 'POST',
+                data: formData1,
+                datatype: 'json',
+                processData: false,
+                contentType: false,
+                success: function (data, msg, err, xhr) {
+                    console.log(data['status'])
+                    if(data['status'] === "200"){
+                        console.log(data)
+                        alert(data['message'])
+                    }else {
+                        alert(data['message'])
+                    }
+                }
+            });
+        })
+        $("#download_code").bind('click', function () {
+            var formData1 = new FormData();
+            var file = $('#fileUpload')[0].files[0]
+            formData1.append('file', file);
+            formData1.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            formData1.append('charts_type', $('select#autoSizingSelect option:selected').val());
+            formData1.append('set', $('select#variableSelect option:selected').text());
+            formData1.append('max_scale', $('#max_scale').val());
+            formData1.append('step_size', $('#step_size').val());
+            formData1.append('min_scale', $('#min_scale').val());
+            formData1.append('align', $('select#alignSelect option:selected').val());
+            formData1.append('legend', $('select#legendSelect option:selected').val());
+            formData1.append('title', $('#title').val());
+            formData1.append('x_axes', $('#x_axes').val());
+            formData1.append('y_axes', $('#y_axes').val());
+            formData1.append('colour_set_id', $('select#colourSelect option:selected').data('id'));
+            $.ajax({
+                url: '{% url 'accounts:generate_code' %}',
+                type: 'POST',
+                data: formData1,
+                datatype: 'json',
+                processData: false,
+                contentType: false,
+                success: function (response, status, request) {
+                    var disposition = request.getResponseHeader('content-disposition');
+                    console.log(disposition)
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = ('generate.py');
+
+                    // The actual download
+                    var blob = new Blob([response], {type: 'application/py'});
+                    console.log(blob)
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+
+                    document.body.appendChild(link);
+
+                    link.click();
+
+                    document.body.removeChild(link);
+
+                }
+            });
+        })
+        {#$("#upload").bind("click", function () {#}
+        {#    var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt)$/;#}
+        {#    if (regex.test($("#fileUpload").val().toLowerCase())) {#}
+        {#        if (typeof (FileReader) != "undefined") {#}
+        {#            var reader = new FileReader();#}
+        {#            reader.onload = function (e) {#}
+                        {#var customers = new Array();#}
+        {#                var rows = e.target.result.split("\n");#}
+        {#                rows = rows.map(row => {#}
+        {#                    return row.split(',')#}
+        {#                })#}
+        {#                console.log(rows)#}
+        {##}
+        {#                for (var i = 0; i < rows.length; i++) {#}
+        {##}
+        {#                    var cells = rows[i];#}
+        {#                    console.log(cells)#}
+                            {#if (cells.length > 1) {#}
+                            {#    #}
+        //                   {
+        {#                }#}
+                        {#console.log(JSON.stringify(customers))#}
+                        {#$("#dvCSV").html('');#}
+                        {#$("#dvCSV").append(JSON.stringify(customers));#}
+        {#            }#}
+        {#            reader.readAsText($("#fileUpload")[0].files[0]);#}
+        {#        } else {#}
+        {#            alert("This browser does not support HTML5.");#}
+        {#        }#}
+        {#    } else {#}
+        {#        alert("Please upload a valid CSV file.");#}
+        {#    }#}
+
+        document.getElementById("download").addEventListener('click', function () {
+            var chart_type = $('select#autoSizingSelect option:selected').val()
+            if ( chart_type === "venn_diagram"){
+                var img = document.getElementById("venn");
+                var a = document.getElementById("download");
+                a.href = img.src;
+
+            }else {
+
+                /*Get image of canvas element*/
+
+                var url_base64jp = document.getElementById("chart").toDataURL("image/png");
+                /*get download button (tag: <a></a>) */
+                var a = document.getElementById("download");
+                /*insert chart image url to download button (tag: <a></a>) */
+                a.href = url_base64jp;
+            }
+        });
+    });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+;;files to ignore
+
+;;extensions to ignore
+*.xml
+*.log
+*.pot
+*.pyc
+*.sqlite3
+
+
+;;directories to ignore
+.idea/*
+*/migrations
+media/
+*/__pycache__

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Nico - Color - Management</title>
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+    <!-- Custom styles for this template-->
+{#    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">#}
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous"> -->
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/select2.min.css' %}" rel="stylesheet"/>
+
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/responsive-cust.css' %}" rel="stylesheet">
+</head>
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <!-- <i class="fas fa-laugh-wink"></i> -->
+            </div>
+            <div class="sidebar-brand-text mx-3">&nbsp;</div>
+        </a>
+        <!-- <hr class="sidebar-divider my-0"> -->
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'home_page' %}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
+        {% if request.user.is_superuser %}
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'accounts:user_manangement_list' %}">
+                    <i class="fas fa-users-cog"></i>
+                    <span>User Management</span></a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'accounts:create_color_set' %}">
+                    <i class="fas fa-palette"></i>
+                    <span>Color Set Management</span>
+                </a>
+            </li>
+        {% endif %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:template_management_list' %}">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>Template Management</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:create_graphic' %}">
+                <i class="fas fa-chart-area"></i>
+                <span>Create Graphics</span></a>
+        </li>
+        <div class="text-center d-none">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+    </ul>
+    <!-- End of Sidebar -->
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-lg-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img class="img-profile rounded-circle d-lg-none" src="{% static 'img/undraw_profile.svg' %}">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user.email }}</span>
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                             aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                Profile
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link lnkLogout" href="login.html">
+                            <i class="fas fa-sign-out-alt fa-sm fa-fw" data-toggle="tooltip" data-placement="bottom"
+                               title="Logout"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <img class="" src="{% static 'img/logo.png' %}"/>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- End of Topbar -->
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 text-gray-800">Create Color Set</h1>
+                </div>
+                <!-- DataTales Example -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-success">Create Color Set</h6>
+                    </div>
+                    <div class="card-body">
+                        <!-- <nav>
+                           <div class="nav nav-tabs" id="myTab" role="tablist">
+                              <button class="nav-link active" id="nav-home-tab" data-toggle="tab" data-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Create Color Set</button>
+                              <button class="nav-link" id="nav-profile-tab" data-toggle="tab" data-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Assigned Color Set</button>
+                           </div>
+                        </nav> -->
+                        <div class="tab-content p-3 " id="myTabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                                 aria-labelledby="nav-home-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="text-right mb-3">
+                                            <a href="#"
+                                               class="btn btn-info btn-icon-split d-inline-block shadow-sm ml-3"
+                                               data-toggle="modal" data-target="#colorModal">
+                                          <span class="icon text-white-50">
+                                            <i class="fas fa-plus fa-sm text-white-50"></i>
+                                          </span>
+                                                <span class="text">Create Color Set</span>
+                                            </a>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table border-bottom mb-2" width="100%" cellspacing="0">
+                                                <thead class="thead-light">
+                                                <tr>
+                                                    <th width="25%">Name</th>
+                                                    <th width="25%">Colors</th>
+                                                    <th width="30%">Assigned Chart Types</th>
+                                                    <th width="20%">&nbsp;</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for rec in obj %}
+                                                    <tr>
+                                                        <td>{{ rec.colour_set_name }}</td>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                {% for i in rec.colour_list %}
+                                                                    <span class="colorBox mr-3"
+                                                                          style="background-color: {{ i }}"></span>
+                                                                {% endfor  %}
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            {% for i in rec.chart_list %}
+                                                                {{ i }}
+                                                            {% endfor %}
+                                                            </td>
+                                                        <td>
+                                                            <a href="#" id="edit_colour" data-id="{{ rec.id }}" class="lnkAction font-weight-bold text-success edit_colour"
+                                                               data-toggle="modal" data-target="#editColrorModal" >
+                                                                Edit
+                                                            </a>
+                                                            &nbsp;&nbsp;|&nbsp;&nbsp;
+                                                            <a href="{% url 'accounts:delete_colour_set' rec.id %}"
+                                                               onclick="return confirm('Are you sure you want to delete this template?');"
+                                                               class="lnkAction text-danger">
+                                                                <i class="fas fa-trash-alt"></i>
+                                                            </a>
+                                                            <!-- &nbsp;&nbsp;|&nbsp;&nbsp;
+                                                            <a href="#" class="lnkAction font-weight-bold text-danger" data-toggle="modal" data-target="#assignModal">
+                                                               Assign
+                                                            </a> -->
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                               <div class="row justify-content-center pt-5 pb-4">
+                                  <div class="col-12 col-lg-6">
+                                     <div class="row mb-3">
+                                        <label class="col-sm-4 col-form-label">Select chart type: </label>
+                                        <div class="col-sm-6">
+                                           <select class="form-select form-control" id="autoSizingSelect">
+                                              <option selected>Choose...</option>
+                                              <option value="1">Line chart</option>
+                                              <option value="2">Pie chart</option>
+                                              <option value="3">Bar chart</option>
+                                           </select>
+                                        </div>
+                                     </div>
+                                     <div class="row mb-3">
+                                        <label class="col-sm-4 col-form-label">Select color type: </label>
+                                        <div class="col-sm-6">
+                                           <select class="form-select form-control" id="autoSizingSelect">
+                                              <option selected>Choose...</option>
+                                              <option value="1">Color Set 1</option>
+                                              <option value="2">Color Set 2</option>
+                                              <option value="3">Color Set 3</option>
+                                           </select>
+                                        </div>
+                                     </div>
+                                     <div class="row mb-3">
+                                        <label class="col-sm-4 col-form-label">&nbsp;</label>
+                                        <div class="col-sm-6">
+                                           <a href="#" class="d-inline-block btn  btn-info shadow-sm px-4">Save</a>
+                                           <a href="#" class="d-inline-block btn  btn-danger shadow-sm px-4 ml-2">Cancel</a>
+                                        </div>
+                                     </div>
+                                  </div>
+                               </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; Nico 2021</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+
+<div class="modal fade colorModal" id="colorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Create new color set</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- <div class="row pt-3 pb-2">
+                   <div class="col-12 mb-4">
+                      <h6 class="mb-0">Add color for create a new color set</h6>
+                   </div>
+                   <div class="col-12 mb-3">
+                      <div class="repeater color-repeater-sec">
+                         <div data-repeater-list="color-group">
+                            <div data-repeater-item class="d-flex align-items-center mb-3">
+                               <div class="colorPicker d-flex align-items-center">
+                                  <input type="color" class="form-control form-control-color" id="exampleColorInput" value="#ff0000" title="Choose your color">
+                               </div>
+                               <a href="#" data-repeater-delete type="button" class="btn btn-danger ml-3"><i class="fas fa-trash-alt fa-sm"></i></a>
+                            </div>
+                         </div>
+                         <a href="#" data-repeater-create class="btn btn-info btn-icon-split d-inline-block shadow-sm" >
+                            <span class="icon text-white-50">
+                              <i class="fas fa-plus fa-sm text-white-50"></i>
+                            </span>
+                            <span class="text">Add Color</span>
+                         </a>
+                      </div>
+                   </div>
+                </div> -->
+                <div class="row pt-3 pb-2">
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <h6>Name of the color set</h6>
+                            <input type="text" id="color_set_name" value="" class="form-control" placeholder="Enter name of color set"/>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <h6>Descriptions</h6>
+                            <textarea class="form-control" id="description" placeholder="Enter descriptions" rows="4"></textarea>
+                            <small><i>Maximum 50 characters</i></small>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <h6>Add color for create a new color set</h6>
+                            <div class="repeater color-repeater-sec">
+                                <div class="colour_div">
+                                    <div  class="d-flex align-items-center mb-3">
+                                        <div class="colorPicker w-100 d-flex align-items-center">
+                                            <input type="color" class="form-control form-control-color"
+                                                   id="exampleColorInput_1" name="field_name_1" value="#ff0000" title="Choose your color">
+                                        </div>
+                                        <a href="#" type="button" class="btn btn-danger ml-3 remove_button"><i
+                                                class="fas fa-trash-alt fa-sm"></i></a>
+                                    </div>
+                                </div>
+                                <a id="addButton"
+                                   class="btn btn-info btn-icon-split d-inline-block shadow-sm">
+                                 <span class="icon text-white-50">
+                                 <i class="fas fa-plus fa-sm text-white-50"></i>
+                                 </span>
+                                    <span class="text">Add Color</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <label>Chart Type</label>
+                            <select class="form-control select2 select2-hidden-accessible"
+                                    data-placeholder="Select a chart type" multiple="" id="chart_type" style="width: 100%;" tabindex="-1"
+                                    aria-hidden="true">
+                                <option>Line Chart</option>
+                                <option>Bar Chart</option>
+                                <option>Pie Chart</option>
+                                <option>Venn Diagram</option>
+                            </select>
+                        </div> <!-- /.form-group -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-success" id="save_colour_set">Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade editColrorModal" id="editColrorModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold" id="exampleModalLabel">Edit color set</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row pt-3 pb-2">
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <h6>Name of the color set</h6>
+                            <input type="text" class="form-control" id="edit_colour_set_name" value="" placeholder="Enter name of color set"/>
+                            <input type="hidden" class="form-control" id="edit_colour_set_id" value="" />
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <h6>Descriptions</h6>
+                            <textarea class="form-control" placeholder="Enter descriptions" id="edit_descriptions" rows="4"></textarea>
+                            <small><i>Maximum 50 characters</i></small>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <h6>Edit color for create a new color set</h6>
+                            <div class="repeater color-repeater-sec">
+                                <div class="colour_div_edit">
+
+                                </div>
+                                <a id="addButton_edit"
+                                   class="btn btn-info btn-icon-split d-inline-block shadow-sm">
+                                 <span class="icon text-white-50">
+                                 <i class="fas fa-plus fa-sm text-white-50"></i>
+                                 </span>
+                                    <span class="text">Add Color</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                        <div class="form-group">
+                            <label>Chart Type</label>
+                            <select class="form-control select2 select2-hidden-accessible" multiple=""
+                                    data-placeholder="Select a chart type"  style="width: 100%;" tabindex="-1"
+                                    aria-hidden="true">
+                                <option>Line Chart</option>
+                                <option>Bar Chart</option>
+                                <option>Pie Chart</option>
+                                <option>Venn Diagram</option>
+                            </select>
+                        </div> <!-- /.form-group -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-success" id="save_colour_set_edit" >Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'js/select2.min.js' %}"></script>
+<!-- <script src="js/popper.min.js"></script> -->
+<script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+<!-- Custom scripts for all pages-->
+<script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+
+<script src="{% static 'js/jquery.repeater.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        var addButton = $("#addButton");
+        var wrapper = $('.colour_div');
+        var maxField = 10;
+        var x = 1;
+        $(addButton).click(function () {
+            if (x < maxField) {
+                 x++; //Increment field counter
+                $(wrapper).append('<div class="d-flex align-items-center mb-3 care_type' + x + '">'+
+                                        '<div class="colorPicker w-100 d-flex align-items-center">'+
+                                            '<input type="color" class="form-control form-control-color" name="field_name_' + x + '" id="exampleColorInput_' + x + '" value="" title="Choose your color">'+
+                                        '</div>'+
+                                        '<a href="#" type="button" class="btn btn-danger ml-3 remove_button">' +
+                                        '<i class="fas fa-trash-alt fa-sm"></i></a>'+
+                                    '</div>')
+            }
+        })
+        $(wrapper).on('click', '.remove_button', function (e) {
+            e.preventDefault();
+            $('.care_type' + x).remove(); //Remove field html
+            x--; //Decrement field counter
+            $("#care_type_count").val(x)
+        });
+
+        $("#save_colour_set").bind("click", function () {
+            var selected=[];
+            var chart = $('.select2-search__field').val()
+            $('.select2-selection__choice').each(function(){
+                var chart_ = $(this).text().replace('x', ' ')
+                selected.push(chart_)
+            })
+            var formData = {}
+            var QData = {}
+            var color_code_array = []
+            console.log(x)
+            for(var i=1; i<=x; i++){
+                var color_code = $("#exampleColorInput_"+i).val()
+                color_code_array.push(color_code)
+            }
+
+            var color_set_name = $('#color_set_name').val()
+            var descriptions = $("#description").val()
+            {#var chart = $('select#chart_type option:selected').val()#}
+            QData.csrfmiddlewaretoken = '{{ csrf_token }}';
+            QData.colour_array = color_code_array ;
+            QData.color_set_name = color_set_name ;
+            QData.descriptions = descriptions ;
+            QData.chart_type = selected ;
+            $.ajax({
+                url: "{% url 'accounts:create_color_set' %}",
+                type: 'POST',
+                data: QData,
+                datatype: 'json',
+                success: function (data) {
+                    $('#colorModal').modal('hide')
+                    $(".modal-backdrop.show").css({'opacity': ''});
+                    $('.modal-open').css({'overflow': 'auto'});
+                    if(data['status'] === "200"){
+                        console.log(data)
+                    }else {
+                        alert(data['message'])
+                    }
+                    window.location.reload();
+                }
+            });
+        });
+
+
+        //for edit colour set
+        var addButton_edit = $("#addButton_edit");
+        var wrapper_edit = $('.colour_div_edit');
+        var y = 0;
+        $(addButton_edit).click(function () {
+            if (x < maxField) {
+                 x++; //Increment field counter
+                $(wrapper_edit).append('<div class="d-flex align-items-center mb-3 care_type' + x + '">'+
+                                        '<div class="colorPicker w-100 d-flex align-items-center">'+
+                                            '<input type="color" class="form-control form-control-color" name="edit_field_name_' + x + '" id="editColorInput_' + x + '" value="" title="Choose your color">'+
+                                        '</div>'+
+                                        '<a href="#" type="button" class="btn btn-danger ml-3 remove_button_edit">' +
+                                        '<i class="fas fa-trash-alt fa-sm"></i></a>'+
+                                    '</div>')
+            }
+        })
+
+        $(".edit_colour").bind("click", function () {
+            var id = $(this).data("id")
+            console.log(id)
+            $.get("/accounts/edit_color_set/" + id, function (response) {
+
+                $("#edit_colour_set_name").val(response['colour_set_name'])
+                $("#edit_descriptions").val(response['description'])
+                $("#edit_colour_set_id").val(id)
+                y = response['colour_list'].length
+                $('.colour_div_edit').empty()
+                for (var x = 0; x < response['colour_list'].length; x++) {
+                    console.log(response['colour_list'][x])
+
+                    $('.colour_div_edit').append('<div class="d-flex align-items-center mb-3 care_type' + x + '">' +
+                        '<div class="colorPicker w-100 d-flex align-items-center">' +
+                        '<input type="color" class="form-control form-control-color" name="edit_field_name_' + x + '" id="editColorInput_' + x + '" value="'+response['colour_list'][x]+'" title="Choose your color">' +
+                        '</div>' +
+                        '<a href="#" type="button" class="btn btn-danger ml-3 remove_button_edit">' +
+                        '<i class="fas fa-trash-alt fa-sm"></i></a>' +
+                        '</div>')
+                }
+
+            })
+        });
+
+        $(wrapper_edit).on('click', '.remove_button_edit', function (e) {
+            e.preventDefault();
+            $('.care_type' + y).remove(); //Remove field html
+            y--; //Decrement field counter
+            $("#care_type_count").val(y)
+        });
+
+        $("#save_colour_set_edit").bind("click", function () {
+            var selected=[];
+            var chart = $('.select2-search__field').val()
+            $('.select2-selection__choice').each(function(){
+                var chart_ = $(this).text().replace('x', ' ')
+                selected.push(chart_)
+            })
+
+            var formData = {}
+            var QData = {}
+            var color_code_array = []
+            console.log(x)
+            for(var i=0; i<=x; i++){
+                var color_code = $("#editColorInput_"+i).val()
+                color_code_array.push(color_code)
+            }
+
+            var color_set_name = $('#edit_colour_set_name').val()
+            var descriptions = $("#edit_descriptions").val()
+            var id = $("#edit_colour_set_id").val()
+            QData.csrfmiddlewaretoken = '{{ csrf_token }}';
+            QData.colour_array = color_code_array ;
+            QData.color_set_name = color_set_name ;
+            QData.descriptions = descriptions ;
+            QData.chart_type = selected ;
+            $.ajax({
+                url: "/accounts/edit_color_set/" + id,
+                type: 'POST',
+                data: QData,
+                datatype: 'json',
+                success: function (data) {
+                    $('#colorModal').modal('hide')
+                    $(".modal-backdrop.show").css({'opacity': ''});
+                    $('.modal-open').css({'overflow': 'auto'});
+                    if(data['status'] === "200"){
+                        console.log(data)
+                    }else {
+                        alert(data['message'])
+                    }
+                    window.location.reload();
+                }
+            });
+        });
+
+
+
+    });
+</script>
+</body>
+</html>

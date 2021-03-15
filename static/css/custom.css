@@ -1,0 +1,128 @@
+.bg-gradient-primary {
+	background: #fff;
+	/*background: #11998e;
+	background: -webkit-linear-gradient(200deg, #38ef7d, #11998e);
+	background: linear-gradient(200deg, #38ef7d, #11998e);*/
+    /*background-color: #00a651;
+    background-image: linear-gradient(120deg ,#68eda9 10%,#00a651 100%); 
+    background-size: cover;*/
+}
+
+.sidebar.bg-gradient-primary{
+	background: #0ec989;
+    background: -webkit-linear-gradient(143deg , #0ec989, #8fdcc0); 
+    background: linear-gradient(143deg , #0ec989, #8fdcc0); 
+}
+
+/*form-control*/
+.form-control{background-color: #d6fff0; }
+.form-control:focus{outline: 0; box-shadow: none; }
+select.form-control,.dataTables_filter .form-control{background: transparent;}
+
+/*table*/
+.table td, .table th{vertical-align: middle;}
+.table .thead-light th{border-color: #45be94; border-top: 0; }
+
+/*tabs*/
+.nav-tabs .nav-link{border-radius: 0;color: #5a5c69;}
+.nav-tabs .nav-link:focus{outline: none;box-shadow: none;}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{border: 0; background-color: #19c185; color: #fff; }
+.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover{border-color: transparent;}
+
+
+/*checkbox*/
+.custom-checkbox .custom-control-label::before{border-radius: .20rem; }
+.custom-control-input:checked~.custom-control-label::before{border-color: #ffffff; background-color: #13b37b; }
+.custom-control-input:focus:not(:checked)~.custom-control-label::before,
+.custom-control-input:focus~.custom-control-label::before{box-shadow: none; outline: 0; border-color: #fff; }
+
+/*card*/
+/*buttons*/
+.btn:focus{outline: 0; box-shadow: none; }
+.btn.btn-green-br{border:2px solid #fff; background-color: transparent; color: #fff; }
+.btn.btn-green-br:hover,.btn.btn-green-br.active{border-color: #fff; background-color: #fff; color: #0CCA78; }
+
+/*login*/
+.login-sec{display: block; position: relative; height: 100vh;background: url(../img/background-bg112.png) no-repeat center center;background-size: cover;}
+.login-sec:before{content: ""; display: block; position: absolute;top: 0;bottom: 0;left: 0;right: 0; background: url(../img/background-bg11.png) no-repeat center top;background-size: cover;}
+.login-sec .card{/*background-color: #e5fff1; border-color: #71ffb6;*/ background: #0ec989; background: -webkit-linear-gradient(0deg, #0ec989, #8fdcc0); background: linear-gradient(0deg, #0ec989, #8fdcc0); }
+.login-sec .lnkForget,
+.login-sec .custom-control-label {color: #fff}
+.login-sec .lnkForget{font-size: 1rem;}
+.login-sec .lnkForget:hover{color: #575757;}
+.login-sec h1.h2{font-weight: 800;margin: 0px 0 45px; font-size: 2.5rem; text-shadow: 1px 1px 5px rgba(50, 136, 106,.4); }
+.login-sec .btn.btn-user{letter-spacing: 1px;font-size: 1rem;}
+
+.lnkLogout i{color: #858796}
+.lnkLogout:hover i{color: #19c185}
+
+/*sidebar*/
+.sidebar-dark .sidebar-brand{background: #19c185;}
+.sidebar-dark .nav-item.active .nav-link,.sidebar-dark .nav-item.active .nav-link i,
+.sidebar-dark .nav-item .nav-link:active, .sidebar-dark .nav-item .nav-link:hover,
+.sidebar-dark .nav-item .nav-link:hover i{color: #575757;}
+/*.sidebar .nav-item.active .nav-link,.sidebar .nav-item:hover .nav-link{font-weight: 700;}*/
+.sidebar-dark .nav-item .nav-link,.sidebar-dark .nav-item .nav-link i{color:rgba(255,255,255,1)}
+.sidebar-dark #sidebarToggle{background-color: #fff;}
+.sidebar-dark #sidebarToggle::after,.sidebar-dark.toggled #sidebarToggle::after{color: #575757;}
+.sidebar-dark #sidebarToggle:hover::after{color: #fff;}
+.sidebar-dark #sidebarToggle:hover{color: #fff;background-color: #17a673; border-color: #fff;}
+
+.sidebar.toggled .nav-item .nav-link{padding: .75rem;}
+.sidebar.toggled .nav-item .nav-link span{font-size: .79rem;}
+
+.sidebar .nav-item .collapse .collapse-inner .collapse-item, .sidebar .nav-item .collapsing .collapse-inner .collapse-item{color: #7e808e;}
+.sidebar .nav-item .collapse .collapse-inner .collapse-item.active, .sidebar .nav-item .collapsing .collapse-inner .collapse-item:hover{background-color: #6ad7b0;color: #fff;}
+
+
+/*droup down*/
+.dropdown-item{color: #5a5c69; }
+.dropdown-item:focus, .dropdown-item:hover{color: #fff; background-color: #29d094;}
+
+.topbar .nav-item.dropdown .dropdown-toggle::after{content: '\f078';}
+.topbar .nav-item.dropdown.show .dropdown-toggle::after { content: '\f077';}
+
+/*footer*/
+footer.sticky-footer.bg-white{background-color: #e0fbf1 !important;border-top: 1px solid #9df9d8;}
+
+/*user management*/
+.lnkAction{text-decoration: none !important;}
+
+/*btn-upload*/
+.btn-upload {position: relative;}
+.btn-upload .fUpload{position: absolute; opacity: 0; top: 0; left: 0; cursor: pointer; height: 100%; width: 100%;}
+
+/*paggination*/
+.pagination .page-item.active .page-link,.pagination .page-item:hover .page-link {background: #0ec989; background: -webkit-linear-gradient(143deg , #0ec989, #8fdcc0); background: linear-gradient(143deg , #0ec989, #8fdcc0);border-color: #53d3a6; color: #fff;}
+.pagination .page-link{color: #1cc88a;}
+.pagination .page-link:focus{outline: 0;box-shadow: none;}
+
+
+/*colorPicker*/
+.colorPicker .form-control{ padding: .05rem; min-width: 2.5rem; height: 2rem; border-color: #4ad2a3; border-radius: 0;}
+.colorPicker img{display: none;}
+.colorBox {max-width: 2.5rem; padding: 0; min-width: 2.5rem; height: 2rem; border-radius: 0;display: block;background: #d6fff0;border: 2px solid #4ad2a3;}
+
+/*lp-sec*/
+.lp-sec .btn{min-height: 50px;margin: 0 0 20px;line-height: 50px;}
+
+/*Modal*/
+.modal-header .close{color: #fff;}
+.modal-header .close:focus{outline: none;box-shadow: none;}
+.modal .modal-content{border-radius: 0;border:1px solid rgb(42 198 81)}
+.modal .modal-content .modal-header{color: #fff;background: #19c185;border-radius: 0;border-bottom: 1px solid #2ac651;}
+.modal .modal-footer{border-top: 1px solid #2ac651;border-radius: 0;}
+
+/*colorModal*/
+.modal.colorModal label{font-size: .8rem;}
+
+/*templateModal*/
+.modal.templateModal .modal-body{padding: 2rem}
+
+/*chart-area*/
+.chart-area.ca-default{border: 2px solid #ccfff1; background: #effdf9; }
+
+.ca-actions-sec{margin: -.5rem;}
+
+/*color-repeater-sec*/
+.color-repeater-sec .colorPicker .form-control{min-height: 2.4rem;min-width: 15rem; padding: .1rem;}
